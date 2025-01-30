@@ -8,21 +8,22 @@ builder.Configuration.AddJsonFile("ocelot.json", optional: false, reloadOnChange
 
 builder.Services.AddOcelot(builder.Configuration);
 
-var policy = "MicroservicesPolicy";
+var apiPolicy = "MicroservicesPolicy";
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(policy, builder =>
+    options.AddPolicy(apiPolicy, policy =>
     {
-        builder.AllowAnyOrigin()
-            .AllowAnyMethod()
-            .AllowAnyHeader();
+        policy.WithOrigins("http://localhost:3000")
+       .AllowAnyMethod()
+       .AllowAnyHeader()
+       .AllowCredentials();
     });
 });
 
 var app = builder.Build();
 
-app.UseCors(policy);
+app.UseCors(apiPolicy);
 
 app.UseHttpsRedirection();
 
