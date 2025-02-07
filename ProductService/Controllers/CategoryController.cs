@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace api.Controllers
 {
-    [Route("category")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class CategoryController(ApplicationDbContext _dbContext) : ControllerBase
     {

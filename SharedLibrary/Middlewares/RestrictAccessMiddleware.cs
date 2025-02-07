@@ -5,14 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 
-namespace SharedLibrary
+namespace SharedLibrary.Middlewares
 {
     public class RestrictAccessMiddleware(RequestDelegate next)
     {
         public async Task InvokeAsync(HttpContext context)
         {
             var referrer = context.Request.Headers["Referer"].FirstOrDefault();
-            if(string.IsNullOrEmpty(referrer))
+            if (string.IsNullOrEmpty(referrer))
             {
                 context.Response.StatusCode = 403;
                 await context.Response.WriteAsync("Cant reach.");

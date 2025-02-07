@@ -1,14 +1,12 @@
 using ProductService;
-using SharedLibrary;
+using SharedLibrary.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddInfrastructureService();
-builder.Services.AddWebAPIService();
-
 builder.Services.AddControllers();
 
-
+builder.Services.AddInfrastructureService();
+builder.Services.AddWebAPIService();
 
 var app = builder.Build();
 

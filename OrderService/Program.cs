@@ -1,4 +1,4 @@
-using SharedLibrary;
+using SharedLibrary.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
