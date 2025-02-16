@@ -31,11 +31,11 @@ app.UseHttpsRedirection();
 
 app.UseCors();
 
-app.UseMiddleware<RestrictAccessMiddleware>();
+app.UseAuthentication();
 
 app.UseAuthorization();
 
-app.UseAuthentication();
+app.UseMiddleware<RestrictAccessMiddleware>();
 
 app.MapControllers();
 

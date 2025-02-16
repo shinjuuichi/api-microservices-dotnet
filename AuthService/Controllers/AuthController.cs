@@ -14,17 +14,8 @@ namespace AuthService.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class AuthController : ControllerBase
+    public class AuthController(ApplicationDbContext _dbContext, IConfiguration _configuration) : ControllerBase
     {
-        private readonly ApplicationDbContext _dbContext;
-        private readonly IConfiguration _configuration;
-
-        public AuthController(ApplicationDbContext dbContext, IConfiguration configuration)
-        {
-            _dbContext = dbContext;
-            _configuration = configuration;
-        }
-
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] AuthRequest register)
         {
