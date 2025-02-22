@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using JwtAuthenticationManager;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
@@ -10,12 +11,10 @@ namespace ApiGateway.Middlewares
     public class TokenCheckerMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly IConfiguration _configuration;
 
-        public TokenCheckerMiddleware(RequestDelegate next, IConfiguration configuration)
+        public TokenCheckerMiddleware(RequestDelegate next)
         {
             _next = next;
-            _configuration = configuration;
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -32,13 +31,13 @@ namespace ApiGateway.Middlewares
                 string.IsNullOrWhiteSpace(authorizationHeader) ||
                 !authorizationHeader.ToString().StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
             {
-                await RespondUnauthorized(context, "Unauthorized");
+                await RespondUnauthorized(context, "Unauthorized!");
                 return;
             }
 
             string token = authorizationHeader.ToString()["Bearer ".Length..].Trim();
 
-            ClaimsPrincipal? claimsPrincipal = GetClaimPrincipal(token);
+            ClaimsPrincipal? claimsPrincipal = GetClaimsPrincipal(token);
             if (claimsPrincipal == null)
             {
                 await RespondUnauthorized(context, "Invalid token");
@@ -49,11 +48,12 @@ namespace ApiGateway.Middlewares
             await _next(context);
         }
 
-        private ClaimsPrincipal? GetClaimPrincipal(string jwtToken)
+        private ClaimsPrincipal? GetClaimsPrincipal(string jwtToken)
         {
-            string secretKey = _configuration["Jwt:Key"]!;
-            string validIssuer = _configuration["Jwt:Issuer"]!;
-            string validAudience = _configuration["Jwt:Audience"]!;
+            var secretKey = JwtTokenHandler.JWT_SECURITY_KEY;
+
+            if (string.IsNullOrWhiteSpace(secretKey))
+                throw new InvalidOperationException("JWT Secret Key is not configured properly.");
 
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
 
@@ -61,22 +61,20 @@ namespace ApiGateway.Middlewares
             {
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = securityKey,
-                ValidateIssuer = true,
-                ValidIssuer = validIssuer,
-                ValidateAudience = true,
-                ValidAudience = validAudience,
+                ValidateIssuer = false,
+                ValidateAudience = false,
                 ValidateLifetime = true,
-                ClockSkew = TimeSpan.Zero 
+                ClockSkew = TimeSpan.Zero
             };
 
-            JwtSecurityTokenHandler tokenHandler = new();
+            var tokenHandler = new JwtSecurityTokenHandler();
             try
             {
                 return tokenHandler.ValidateToken(jwtToken, tokenValidationParameters, out _);
             }
             catch (Exception)
             {
-                return null; 
+                return null;
             }
         }
 

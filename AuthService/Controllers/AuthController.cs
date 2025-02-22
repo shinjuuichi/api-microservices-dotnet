@@ -60,11 +60,11 @@ namespace AuthService.Controllers
             var result = CryptoUtil.IsPasswordCorrect(loginRequest.Password, user.Password);
             if (result)
             {
-                return Ok(_jwtTokenHandler.GenerateJwtToken(loginRequest));
+                var response = _jwtTokenHandler.GenerateJwtToken(loginRequest);
+                return Ok(response);
             }
 
             return BadRequest("Invalid credentials");
-
         }
     }
 }

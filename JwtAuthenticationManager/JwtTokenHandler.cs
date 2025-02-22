@@ -10,7 +10,7 @@ namespace JwtAuthenticationManager
 {
     public class JwtTokenHandler
     {
-        public const string JWT_SECURITY_KEY = "yPkCqn4kSWLtaJwXvN2jGzpQRyTZ3gdXkt7FeBJP";
+        public const string JWT_SECURITY_KEY = "yPkCqn4kSWLtaJwXvN2jGzpQRyTZ3gdwadlmawdmkawdawkdnkpawnacOPCPANkkacaeonncpapPNOPXkt7FeBJP";
         private const int JWT_TOKEN_VALIDITY_MINS = 20;
         private readonly UserDbContext _context;
 
@@ -34,7 +34,7 @@ namespace JwtAuthenticationManager
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, findUser.Id.ToString()),
-                new Claim(ClaimTypes.Role, findUser.Role.ToString()),
+                new Claim("Role", findUser.Role.ToString()),
                 new Claim(ClaimTypes.Email, findUser.Email ?? string.Empty),
             };
 

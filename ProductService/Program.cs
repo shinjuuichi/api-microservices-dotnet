@@ -1,3 +1,4 @@
+using JwtAuthenticationManager;
 using ProductService;
 using SharedLibrary.Middlewares;
 
