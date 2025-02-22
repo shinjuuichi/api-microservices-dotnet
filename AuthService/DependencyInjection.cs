@@ -1,5 +1,6 @@
 ﻿
 
+using AuthService.Service;
 using JwtAuthenticationManager;
 using JwtAuthenticationManager.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -12,6 +13,7 @@ namespace AuthService
     {
         public static IServiceCollection AddInfrastructureService(this IServiceCollection services)
         {
+            services.AddScoped<IUserService, UserService>();
             services.AddScoped<JwtTokenHandler>();
 
             services.AddDbContext<UserDbContext>();
