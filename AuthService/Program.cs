@@ -1,13 +1,12 @@
 using AuthService;
+using JwtAuthenticationManager;
 using SharedLibrary.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-
 builder.Services.AddInfrastructureService();
 builder.Services.AddWebAPIService();
-builder.Services.AddAuthenticationService(builder.Configuration);
 
 builder.Services.AddCors(options =>
 {

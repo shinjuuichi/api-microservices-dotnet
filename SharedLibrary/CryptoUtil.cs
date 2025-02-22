@@ -1,4 +1,6 @@
-﻿namespace AuthService.Util
+﻿using BCrypt.Net;
+
+namespace SharedLibrary
 {
     public static class CryptoUtil
     {

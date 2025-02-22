@@ -1,11 +1,14 @@
-﻿using AuthService.Data;
-using AuthService.Models;
-using AuthService.Models.Enum;
-using AuthService.Util;
+﻿
+using JwtAuthenticationManager;
+using JwtAuthenticationManager.Data;
+using JwtAuthenticationManager.Dto;
+using JwtAuthenticationManager.Models;
+using JwtAuthenticationManager.Models.Enum;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using SharedLibrary;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -14,17 +17,17 @@ namespace AuthService.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class AuthController(ApplicationDbContext _dbContext, IConfiguration _configuration) : ControllerBase
+    public class AuthController(UserDbContext _dbContext, JwtTokenHandler _jwtTokenHandler) : ControllerBase
     {
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] AuthRequest register)
+        public async Task<IActionResult> Register([FromBody] AuthenticationRequest registerRequest)
         {
             try
             {
                 var user = new User
                 {
-                    Email = register.Email,
-                    Password = CryptoUtil.EncryptPassword(register.Password),
+                    Email = registerRequest.Email,
+                    Password = CryptoUtil.EncryptPassword(registerRequest.Password),
                     Role = Roles.User,
                 };
 
@@ -35,11 +38,11 @@ namespace AuthService.Controllers
             }
             catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx && sqlEx.Number == 2601)
             {
-                return Conflict(new { Message = $"Email '{register.Email}' is already in use." });
+                return Conflict(new { Message = $"Email '{registerRequest.Email}' is already in use." });
             }
             catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx && sqlEx.Number == 2627)
             {
-                return Conflict(new { Message = $"Email '{register.Email}' is already in use." });
+                return Conflict(new { Message = $"Email '{registerRequest.Email}' is already in use." });
             }
             catch (Exception ex)
             {
@@ -48,40 +51,20 @@ namespace AuthService.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] AuthRequest login)
+        public async Task<IActionResult> Login([FromBody] AuthenticationRequest loginRequest)
         {
-            var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == login.Email);
+            var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == loginRequest.Email);
             if (user == null)
                 return BadRequest("Invalid credentials");
 
-            var result = CryptoUtil.IsPasswordCorrect(login.Password, user.Password);
+            var result = CryptoUtil.IsPasswordCorrect(loginRequest.Password, user.Password);
             if (result)
             {
-                string token = GenerateToken(user, user.Role.ToString());
-                return Ok(new { Token = token });
+                return Ok(_jwtTokenHandler.GenerateJwtToken(loginRequest));
             }
+
             return BadRequest("Invalid credentials");
-        }
 
-        private string GenerateToken(User user, string role)
-        {
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
-            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var claims = new[]
-            {
-                            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                            new Claim(ClaimTypes.Email, user.Email!),
-                            new Claim(ClaimTypes.Role, role),
-                        };
-            var token = new JwtSecurityToken(
-                issuer: _configuration["Jwt:Issuer"],
-                audience: _configuration["Jwt:Audience"],
-                claims: claims,
-                expires: DateTime.UtcNow.AddHours(2),
-                signingCredentials: credentials);
-            return new JwtSecurityTokenHandler().WriteToken(token);
         }
-
-        public record AuthRequest(string Email, string Password);
     }
 }

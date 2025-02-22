@@ -1,4 +1,4 @@
-﻿namespace AuthService.Models.Enum
+﻿namespace JwtAuthenticationManager.Models.Enum
 {
     public enum Roles
     {

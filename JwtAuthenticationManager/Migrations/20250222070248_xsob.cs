@@ -2,10 +2,12 @@
 
 #nullable disable
 
-namespace AuthService.Migrations
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
+namespace JwtAuthenticationManager.Migrations
 {
     /// <inheritdoc />
-    public partial class xx : Migration
+    public partial class xsob : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -24,6 +26,15 @@ namespace AuthService.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "Email", "FullName", "Password", "Role" },
+                values: new object[,]
+                {
+                    { 1, "admin@example.com", "John Doe", "$2a$11$eoomvL88HD10v3vgfAB8sOcEOwfITABVHbSDvY6jG4d5T.5sarFwO", "Admin" },
+                    { 2, "user@example.com", "Jane Doe", "$2a$11$bV1Wc78NboWsw1Kb/VYIbun6CA8te6nb3867HRllNsxZ/lOwNQme2", "User" }
                 });
 
             migrationBuilder.CreateIndex(

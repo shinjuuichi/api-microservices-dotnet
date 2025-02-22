@@ -1,8 +1,8 @@
-﻿using AuthService.Models.Enum;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using JwtAuthenticationManager.Models.Enum;
 
-namespace AuthService.Models
+namespace JwtAuthenticationManager.Models
 {
     public class User
     {
