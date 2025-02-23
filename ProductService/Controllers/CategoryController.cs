@@ -26,7 +26,7 @@ namespace api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody] CategoryDto categoryDto)
+        public async Task<IActionResult> Add([FromBody] CategoryDTO categoryDto)
         {
             if (string.IsNullOrWhiteSpace(categoryDto.Name))
                 return BadRequest("Category name cannot be empty.");
@@ -40,7 +40,7 @@ namespace api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] CategoryDto categoryDto)
+        public async Task<IActionResult> Update(int id, [FromBody] CategoryDTO categoryDto)
         {
             var category = await _dbContext.Categories.FindAsync(id);
             if (category == null)
