@@ -3,7 +3,7 @@ using ProductService.Models;
 
 namespace ProductService.Data
 {
-    public class ApplicationDbContext(IConfiguration _configuration) : DbContext
+    public class ProductDbContext(IConfiguration _configuration) : DbContext
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

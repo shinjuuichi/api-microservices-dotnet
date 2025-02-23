@@ -10,7 +10,7 @@ using ProductService.Data;
 
 namespace ProductService.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(ProductDbContext))]
     [Migration("20250130161436_x")]
     partial class x
     {

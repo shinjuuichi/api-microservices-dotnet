@@ -9,6 +9,9 @@ builder.Services.AddInfrastructureService();
 builder.Services.AddWebAPIService();
 builder.Services.AddCustomJwtAuthentication();
 
+builder.Services.AddTransient<ExceptionHandlingMiddleware>();
+
+
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(builder =>

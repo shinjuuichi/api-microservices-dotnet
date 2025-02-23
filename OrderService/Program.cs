@@ -1,3 +1,4 @@
+using JwtAuthenticationManager;
 using OrderService;
 using SharedLibrary.Middlewares;
 
@@ -8,8 +9,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddInfrastructureService();
 builder.Services.AddWebAPIService();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddCustomJwtAuthentication();
+
+builder.Services.AddTransient<ExceptionHandlingMiddleware>();
+
 
 var app = builder.Build();
 

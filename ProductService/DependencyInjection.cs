@@ -7,7 +7,7 @@ namespace ProductService
     {
         public static IServiceCollection AddInfrastructureService(this IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>();
+            services.AddDbContext<ProductDbContext>();
 
             return services;
         }

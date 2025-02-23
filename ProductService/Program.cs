@@ -9,6 +9,8 @@ builder.Services.AddControllers();
 builder.Services.AddInfrastructureService();
 builder.Services.AddWebAPIService();
 
+builder.Services.AddTransient<ExceptionHandlingMiddleware>();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

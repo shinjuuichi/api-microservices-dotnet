@@ -57,9 +57,9 @@
       }
     },
 
-    //Order Web API
+    //Order management
     {
-      "DownstreamPathTemplate": "/api/v1/order",
+      "DownstreamPathTemplate": "/api/v1/admin/orders/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -67,9 +67,38 @@
           "Port": 5003
         }
       ],
-      "UpstreamPathTemplate": "/api/v1/order",
-      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
+      "UpstreamPathTemplate": "/api/v1/admin/orders/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "Role": "Admin"
+      }
+    },
+
+    //Order for user
+    {
+      "DownstreamPathTemplate": "/api/v1/user/orders/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/user/orders/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "Role": "User"
+      }
     }
+
   ],
   "GlobalConfiguration": {
     "BaseUrl": "https://localhost:5000"
