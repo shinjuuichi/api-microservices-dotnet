@@ -5,12 +5,13 @@ using SharedLibrary.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
 builder.Services.AddControllers();
 builder.Services.AddInfrastructureService();
 builder.Services.AddWebAPIService();
 builder.Services.AddCustomJwtAuthentication();
+
+// Add MassTransit RabbitMQ
 builder.Services.AddRabbitMQServices(builder.Configuration);
 
 builder.Services.AddScoped<ExceptionHandlingMiddleware>();

@@ -36,7 +36,7 @@ namespace OrderService.Controllers.Admin
             var order = new Order
             {
                 UserId = orderDto.UserId,
-                OrderDate = orderDto.OrderDate,
+                OrderDate = DateTime.UtcNow,
                 OrderDetails = orderDto.OrderDetails.Select(od => new OrderDetail
                 {
                     ProductId = od.ProductId,
@@ -58,7 +58,7 @@ namespace OrderService.Controllers.Admin
                 return NotFound($"Order with ID {id} not found.");
 
             order.UserId = orderDto.UserId;
-            order.OrderDate = orderDto.OrderDate;
+            order.OrderDate = DateTime.UtcNow;
             order.OrderDetails = orderDto.OrderDetails.Select(od => new OrderDetail
             {
                 ProductId = od.ProductId,

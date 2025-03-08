@@ -1,9 +1,9 @@
-version: "1.1"
+version: "3.8"
 
 services:
   rabbitmq:
     container_name: rabbitmq
-    image: rabbitmq:4.0-management
+    image: rabbitmq:3-management
     ports:
       - "5672:5672"
       - "15672:15672"
@@ -12,6 +12,53 @@ services:
       RABBITMQ_DEFAULT_PASS: "guest"
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - microservices-network
+
+  api-gateway:
+    image: shinjuuichi/api-gateway:latest
+    ports:
+      - "5000:8080"
+    depends_on:
+      - auth-service
+      - product-service
+      - order-service
+    networks:
+      - microservices-network
+
+  auth-service:
+    image: shinjuuichi/auth-service:latest
+    ports:
+      - "5001:8080"
+    environment:
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+    networks:
+      - microservices-network
+
+  product-service:
+    image: shinjuuichi/product-service:latest
+    ports:
+      - "5002:8080"
+    environment:
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+    networks:
+      - microservices-network
+
+  order-service:
+    image: shinjuuichi/order-service:latest
+    ports:
+      - "5003:8080"
+    environment:
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+    networks:
+      - microservices-network
+
+networks:
+  microservices-network:
+    driver: bridge
 
 volumes:
   rabbitmq_data:

@@ -8,10 +8,11 @@ builder.Services.AddControllers();
 builder.Services.AddInfrastructureService();
 builder.Services.AddWebAPIService();
 builder.Services.AddCustomJwtAuthentication();
+
+// Add MassTransit RabbitMQ
 builder.Services.AddRabbitMQServices(builder.Configuration);
 
 builder.Services.AddScoped<ExceptionHandlingMiddleware>();
-
 
 builder.Services.AddCors(options =>
 {

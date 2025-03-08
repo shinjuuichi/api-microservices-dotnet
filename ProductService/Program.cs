@@ -5,10 +5,10 @@ using SharedLibrary.Middlewares;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-
 builder.Services.AddInfrastructureService();
 builder.Services.AddWebAPIService();
 
+// Add MassTransit RabbitMQ
 builder.Services.AddRabbitMQServices(builder.Configuration);
 
 builder.Services.AddScoped<ExceptionHandlingMiddleware>();

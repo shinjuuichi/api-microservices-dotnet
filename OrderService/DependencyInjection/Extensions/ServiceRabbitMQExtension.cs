@@ -1,5 +1,7 @@
 ﻿using MassTransit;
 using OrderService.DependencyInjection.Extensions.DependencyInjection.Options;
+using RabbitMQ.Contracts.Events;
+using System.Reflection;
 
 
 namespace OrderService.DependencyInjection.Extensions.DependencyInjection.Extensions
@@ -11,16 +13,21 @@ namespace OrderService.DependencyInjection.Extensions.DependencyInjection.Extens
             var massTransitConfig = new MassTransitConfiguration();
             configuration.GetSection("MassTransitConfiguration").Bind(massTransitConfig);
 
-            services.AddMassTransit(config =>
+            services.AddMassTransit(mt =>
             {
-                config.UsingRabbitMq((context, cfg) =>
+                mt.AddConsumers(Assembly.GetExecutingAssembly());
+
+                mt.UsingRabbitMq((context, bus) =>
                 {
-                    cfg.Host(massTransitConfig.Host, h =>
+                    bus.Host(massTransitConfig.Host, h =>
                     {
                         h.Username(massTransitConfig.Username);
                         h.Password(massTransitConfig.Password);
                     });
+
+                    bus.ConfigureEndpoints(context);
                 });
+                mt.AddRequestClient<StockCheckEvent>();
             });
 
             return services;

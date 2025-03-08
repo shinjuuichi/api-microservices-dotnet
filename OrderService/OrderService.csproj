@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
@@ -28,6 +28,10 @@
 		<ProjectReference Include="..\JwtAuthenticationManager\JwtAuthenticationManager.csproj" />
 		<ProjectReference Include="..\RabbitMQ.Contracts\RabbitMQ.Contracts.csproj" />
 		<ProjectReference Include="..\SharedLibrary\SharedLibrary.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="MessageBus\Consumers\" />
 	</ItemGroup>
 
 </Project>
