@@ -1,0 +1,32 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Build and Tag Docker Images
+        run: |
+          docker build -t shinjuuichi/api-gateway:latest -f ApiGateway/Dockerfile .
+          docker build -t shinjuuichi/auth-service:latest -f AuthService/Dockerfile .
+          docker build -t shinjuuichi/product-service:latest -f ProductService/Dockerfile .
+          docker build -t shinjuuichi/order-service:latest -f OrderService/Dockerfile .
+
+      - name: Push Images to Docker Hub
+        run: |
+          docker push shinjuuichi/api-gateway:latest
+          docker push shinjuuichi/auth-service:latest
+          docker push shinjuuichi/product-service:latest
+          docker push shinjuuichi/order-service:latest
