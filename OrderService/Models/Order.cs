@@ -9,6 +9,7 @@ namespace OrderService.Models
         public int Id { get; set; }
         [Required]
         public int UserId { get; set; }
+        public string? UserName { get; set; }
         public DateTime OrderDate { get; set; }
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
 

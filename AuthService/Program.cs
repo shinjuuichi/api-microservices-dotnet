@@ -1,4 +1,5 @@
 using AuthService;
+using AuthService.Messaging.RabbitMQ;
 using JwtAuthenticationManager;
 using SharedLibrary.Middlewares;
 
@@ -8,6 +9,8 @@ builder.Services.AddControllers();
 builder.Services.AddInfrastructureService();
 builder.Services.AddWebAPIService();
 builder.Services.AddCustomJwtAuthentication();
+builder.Services.AddRabbitListeners();
+
 
 builder.Services.AddTransient<ExceptionHandlingMiddleware>();
 

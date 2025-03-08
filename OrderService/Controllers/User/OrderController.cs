@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using EasyNetQ;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OrderService.Data;
 using OrderService.DTOs;
+using OrderService.Messaging.Events;
 using OrderService.Models;
 using System.Security.Claims;
 
@@ -46,17 +48,33 @@ namespace OrderService.Controllers.User
         }
 
         [HttpPost]
-        public async Task<IActionResult> PlaceOrder([FromBody] UserOrderDTO orderDto)
+        public async Task<IActionResult> PlaceOrder([FromBody] UserOrderDTO orderDto, [FromServices] IBus bus)
         {
             var userId = GetUserIdFromToken();
             if (userId == null)
-                return Unauthorized(new { Message = "Invalid or expired token" });
+                return Unauthorized(new { Message = "Invalid token" });
 
             var order = new Order
             {
                 UserId = userId.Value,
-                OrderDate = orderDto.OrderDate,
+                OrderDate = DateTime.UtcNow,
                 OrderDetails = orderDto.OrderDetails.Select(od => new OrderDetail
+                {
+                    ProductId = od.ProductId,
+                    ProductName = "Pending",
+                    ProductPrice = od.ProductPrice,
+                    Quantity = od.Quantity
+                }).ToList()
+            };
+
+            _dbContext.Orders.Add(order);
+            await _dbContext.SaveChangesAsync();
+
+            var orderEvent = new OrderCreatedEvent
+            {
+                OrderId = order.Id,
+                UserId = order.UserId,
+                OrderDetails = order.OrderDetails.Select(od => new OrderDetailDTO
                 {
                     ProductId = od.ProductId,
                     Quantity = od.Quantity,
@@ -64,10 +82,9 @@ namespace OrderService.Controllers.User
                 }).ToList()
             };
 
-            _dbContext.Orders.Add(order);
-            await _dbContext.SaveChangesAsync();
+            await bus.PubSub.PublishAsync(orderEvent);
 
-            return CreatedAtAction(nameof(GetUserOrders), new { userId = order.UserId }, order);
+            return Accepted(new { Message = "Order placed successfully, awaiting stock validation.", OrderId = order.Id });
         }
     }
 }

@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using EasyNetQ;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProductService.Data;
 using ProductService.Dto;
+using ProductService.Messaging.Events;
 using ProductService.Models;
 using System.Threading.Tasks;
 
@@ -10,7 +11,7 @@ namespace api.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class ProductController(ProductDbContext _dbContext) : ControllerBase
+    public class ProductController(ProductDbContext _dbContext, IBus _bus) : ControllerBase
     {
         [HttpGet]
         public async Task<IActionResult> GetAll()
@@ -54,25 +55,38 @@ namespace api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] ProductDTO updatedProduct)
+        public async Task UpdateProductAsync(int id, ProductDTO updatedProduct)
         {
-            var product = await _dbContext.Products.FindAsync(id);
-            if (product == null)
-                return NotFound($"Product with ID {id} not found.");
+            var existingProduct = await _dbContext.Products.Include(p => p.Category).FirstOrDefaultAsync(p => p.Id == id);
+            if (existingProduct == null)
+                throw new Exception("Product not found");
 
-            var category = await _dbContext.Categories.FindAsync(updatedProduct.CategoryId);
-            if (category == null)
-                return NotFound("Category not found.");
+            if (existingProduct.Category.Id != updatedProduct.CategoryId)
+            {
+                var newCategory = await _dbContext.Categories.FindAsync(updatedProduct.CategoryId);
+                if (newCategory == null)
+                    throw new Exception("New category not found");
 
-            product.Name = updatedProduct.Name;
-            product.Price = updatedProduct.Price;
-            product.Quantity = updatedProduct.Quantity;
-            product.Category = category;
+                existingProduct.Category = newCategory;
+            }
 
-            _dbContext.Products.Update(product);
+            existingProduct.Name = updatedProduct.Name;
+            existingProduct.Price = updatedProduct.Price;
+            existingProduct.Quantity = updatedProduct.Quantity;
+
             await _dbContext.SaveChangesAsync();
 
-            return Ok(product);
+            // Publish ProductUpdatedEvent to RabbitMQ
+            var productUpdatedEvent = new ProductUpdatedEvent
+            {
+                Id = existingProduct.Id,
+                Name = existingProduct.Name,
+                Price = existingProduct.Price,
+                Quantity = existingProduct.Quantity,
+                CategoryId = existingProduct.Category.Id
+            };
+
+            await _bus.PubSub.PublishAsync(productUpdatedEvent);
         }
 
         [HttpDelete("{id}")]

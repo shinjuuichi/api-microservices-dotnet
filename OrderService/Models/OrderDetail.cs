@@ -6,13 +6,10 @@ namespace OrderService.Models
     {
         [Key]
         public int Id { get; set; }
-        [Required]
         public int OrderId { get; set; }
-        [Required]
         public int ProductId { get; set; }
-        [Required]
-        public int Quantity { get; set; }
-        [Required]
+        public string ProductName { get; set; }
         public decimal ProductPrice { get; set; }
+        public int Quantity { get; set; }
     }
 }
