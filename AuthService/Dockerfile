@@ -1,5 +1,6 @@
 # See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
 #docker build -t auth-service:v1.0 -f AuthService/Dockerfile .
+# docker run -d -p 5002:8080 --name auth-service auth-service
 # This stage is used when running from VS in fast mode (Default for Debug configuration)
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 USER $APP_UID
@@ -15,6 +16,7 @@ WORKDIR /src
 COPY ["AuthService/AuthService.csproj", "AuthService/"]
 COPY ["JwtAuthenticationManager/JwtAuthenticationManager.csproj", "JwtAuthenticationManager/"]
 COPY ["SharedLibrary/SharedLibrary.csproj", "SharedLibrary/"]
+COPY ["RabbitMQ.Contracts/RabbitMQ.Contracts.csproj", "RabbitMQ.Contracts/"]
 RUN dotnet restore "./AuthService/AuthService.csproj"
 COPY . .
 WORKDIR "/src/AuthService"
