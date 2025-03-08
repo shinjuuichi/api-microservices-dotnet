@@ -1,15 +1,13 @@
-﻿
-
-using AuthService.Service;
+﻿using AuthService.Service;
 using JwtAuthenticationManager;
 using JwtAuthenticationManager.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-namespace AuthService
+namespace AuthService.DependencyInjection.Extensions
 {
-    public static class DependencyInjection
+    public static class ServiceCollectionExtensions
     {
         public static IServiceCollection AddInfrastructureService(this IServiceCollection services)
         {

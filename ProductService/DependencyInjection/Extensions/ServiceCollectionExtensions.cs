@@ -1,9 +1,8 @@
-﻿
-using ProductService.Data;
+﻿using ProductService.Data;
 
-namespace ProductService
+namespace ProductService.DependencyInjection.Extensions
 {
-    public static class DependencyInjection
+    public static class ServiceCollectionExtensions
     {
         public static IServiceCollection AddInfrastructureService(this IServiceCollection services)
         {

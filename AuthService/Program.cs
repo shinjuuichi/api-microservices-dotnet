@@ -1,4 +1,4 @@
-using AuthService;
+using AuthService.DependencyInjection.Extensions;
 using JwtAuthenticationManager;
 using SharedLibrary.Middlewares;
 
@@ -8,8 +8,9 @@ builder.Services.AddControllers();
 builder.Services.AddInfrastructureService();
 builder.Services.AddWebAPIService();
 builder.Services.AddCustomJwtAuthentication();
+builder.Services.AddRabbitMQServices(builder.Configuration);
 
-builder.Services.AddTransient<ExceptionHandlingMiddleware>();
+builder.Services.AddScoped<ExceptionHandlingMiddleware>();
 
 
 builder.Services.AddCors(options =>

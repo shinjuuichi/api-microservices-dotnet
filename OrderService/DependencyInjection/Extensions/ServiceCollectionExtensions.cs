@@ -1,8 +1,8 @@
 ﻿using OrderService.Data;
 
-namespace OrderService
+namespace OrderService.DependencyInjection.Extensions
 {
-    public static class DependencyInjection
+    public static class ServiceCollectionExtensions
     {
         public static IServiceCollection AddInfrastructureService(this IServiceCollection services)
         {

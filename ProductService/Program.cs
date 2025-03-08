@@ -1,5 +1,5 @@
 using JwtAuthenticationManager;
-using ProductService;
+using ProductService.DependencyInjection.Extensions;
 using SharedLibrary.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,7 +9,9 @@ builder.Services.AddControllers();
 builder.Services.AddInfrastructureService();
 builder.Services.AddWebAPIService();
 
-builder.Services.AddTransient<ExceptionHandlingMiddleware>();
+builder.Services.AddRabbitMQServices(builder.Configuration);
+
+builder.Services.AddScoped<ExceptionHandlingMiddleware>();
 
 var app = builder.Build();
 

@@ -12,7 +12,7 @@ builder.Configuration.AddJsonFile("ocelot.json", optional: false, reloadOnChange
 builder.Services.AddOcelot(builder.Configuration);
 builder.Services.AddCustomJwtAuthentication();
 
-builder.Services.AddTransient<ExceptionHandlingMiddleware>();
+builder.Services.AddScoped<ExceptionHandlingMiddleware>();
 
 var apiPolicy = "MicroservicesPolicy";
 

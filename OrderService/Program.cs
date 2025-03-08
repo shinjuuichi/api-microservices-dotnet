@@ -1,5 +1,6 @@
 using JwtAuthenticationManager;
-using OrderService;
+using OrderService.DependencyInjection.Extensions;
+using OrderService.DependencyInjection.Extensions.DependencyInjection.Extensions;
 using SharedLibrary.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,8 +11,9 @@ builder.Services.AddControllers();
 builder.Services.AddInfrastructureService();
 builder.Services.AddWebAPIService();
 builder.Services.AddCustomJwtAuthentication();
+builder.Services.AddRabbitMQServices(builder.Configuration);
 
-builder.Services.AddTransient<ExceptionHandlingMiddleware>();
+builder.Services.AddScoped<ExceptionHandlingMiddleware>();
 
 
 var app = builder.Build();
