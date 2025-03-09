@@ -111,13 +111,16 @@ dotnet run
 - **DELETE** `/api/v1/product/{id}` - Delete a product
 
 ### 🏢 Order Service
-- **GET** `/api/v1/admin/orders` - Retrieve all orders (Admin)
-- **GET** `/api/v1/admin/orders/{id}` - Retrieve order by ID (Admin)
-- **POST** `/api/v1/admin/orders` - Create new order (Admin)
-- **PUT** `/api/v1/admin/orders/{id}` - Update order (Admin)
-- **DELETE** `/api/v1/admin/orders/{id}` - Delete order (Admin)
+#### 💼 Admin Endpoints
+- **GET** `/api/v1/admin/orders` - Retrieve all orders
+- **GET** `/api/v1/admin/orders/{id}` - Retrieve order by ID
+- **POST** `/api/v1/admin/orders` - Create a new order
+- **PUT** `/api/v1/admin/orders/{id}` - Update an order
+- **DELETE** `/api/v1/admin/orders/{id}` - Delete an order
 
----
+#### 👨‍👩‍👦 User Endpoints
+- **GET** `/api/v1/user/orders` - Retrieve user orders
+- **POST** `/api/v1/user/orders` - Place a new order
 
 ## 🛠️ Key Features
 
