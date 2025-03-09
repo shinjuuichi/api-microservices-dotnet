@@ -44,8 +44,7 @@ Ensure you have the following installed:
 
 #### 1️⃣ Clone the Repository
 ```sh
-git clone <repository-url>
-cd <repository-name>
+git clone https://github.com/shinjuuichi/api-microservices-dotnet
 ```
 
 #### 2️⃣ Set Up Databases
