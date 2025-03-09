@@ -7,6 +7,8 @@ using SharedLibrary.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.AddServiceDefaults();
+
 builder.Configuration.AddJsonFile("ocelot.json", optional: false, reloadOnChange: true);
 
 builder.Services.AddOcelot(builder.Configuration);
@@ -28,6 +30,8 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+
+app.MapDefaultEndpoints();
 
 app.UseCors(apiPolicy);
 

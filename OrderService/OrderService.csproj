@@ -25,6 +25,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\api-microservices-dotnet.ServiceDefaults\api-microservices-dotnet.ServiceDefaults.csproj" />
 		<ProjectReference Include="..\JwtAuthenticationManager\JwtAuthenticationManager.csproj" />
 		<ProjectReference Include="..\RabbitMQ.Contracts\RabbitMQ.Contracts.csproj" />
 		<ProjectReference Include="..\SharedLibrary\SharedLibrary.csproj" />

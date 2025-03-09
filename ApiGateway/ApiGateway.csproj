@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\api-microservices-dotnet.ServiceDefaults\api-microservices-dotnet.ServiceDefaults.csproj" />
     <ProjectReference Include="..\JwtAuthenticationManager\JwtAuthenticationManager.csproj" />
     <ProjectReference Include="..\SharedLibrary\SharedLibrary.csproj" />
   </ItemGroup>
