@@ -16,7 +16,7 @@ namespace AuthService.DependencyInjection.Extensions
             services.AddScoped<JwtTokenHandler>();
 
             services.AddDbContext<UserDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(configuration.GetConnectionString("UserDb")));
 
             return services;
         }
