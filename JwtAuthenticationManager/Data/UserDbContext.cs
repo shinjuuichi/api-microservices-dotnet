@@ -5,11 +5,10 @@ using SharedLibrary;
 
 namespace JwtAuthenticationManager.Data
 {
-    public class UserDbContext() : DbContext
+    public class UserDbContext : DbContext
     {
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public UserDbContext(DbContextOptions<UserDbContext> options) : base(options)
         {
-            optionsBuilder.UseSqlServer("Server=localhost,1333;Database=UserDb;User Id=sa;Password=Shinjuuichidesu@11;TrustServerCertificate=True");
         }
         public DbSet<User> Users { get; set; }
 
@@ -20,23 +19,23 @@ namespace JwtAuthenticationManager.Data
                 .IsUnique();
 
             modelBuilder.Entity<User>().HasData(
-            new User
-            {
-                Id = 1,
-                FullName = "John Doe",
-                Role = Roles.Admin,
-                Email = "admin@example.com",
-                Password = CryptoUtil.EncryptPassword("Admin@123")
-            },
-            new User
-            {
-                Id = 2,
-                FullName = "Jane Doe",
-                Role = Roles.User,
-                Email = "user@example.com",
-                Password = CryptoUtil.EncryptPassword("User@123")
-            }
-        );
+                new User
+                {
+                    Id = 1,
+                    FullName = "John Doe",
+                    Role = Roles.Admin,
+                    Email = "admin@example.com",
+                    Password = CryptoUtil.EncryptPassword("Admin@123")
+                },
+                new User
+                {
+                    Id = 2,
+                    FullName = "Jane Doe",
+                    Role = Roles.User,
+                    Email = "user@example.com",
+                    Password = CryptoUtil.EncryptPassword("User@123")
+                }
+            );
         }
     }
 }

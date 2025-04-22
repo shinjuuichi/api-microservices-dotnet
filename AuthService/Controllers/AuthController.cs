@@ -65,7 +65,7 @@ namespace AuthService.Controllers
             if (user == null)
                 return NotFound(new { Message = "User not found" });
 
-            return Ok(new { Id = user.Id, Email = user.Email, Role = user.Role });
+            return Ok(new { Id = user.Id, Email = user.Email, Role = user.Role.ToString() });
         }
     }
 }

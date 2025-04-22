@@ -101,7 +101,6 @@ namespace OrderService.Controllers.User
             if (userId == null)
                 return Unauthorized(new { Message = "Invalid or expired token" });
 
-            // Send a request to check stock availability
             var stockCheckEvent = new StockCheckEvent
             {
                 OrderItems = orderDto.OrderDetails.Select(od => new OrderItem
@@ -117,7 +116,6 @@ namespace OrderService.Controllers.User
                 return BadRequest(new { Message = response.Message.FailureReason });
             }
 
-            // Only create the order if stock is available
             var order = new Order
             {
                 UserId = userId.Value,
