@@ -101,6 +101,15 @@ namespace OrderService.Controllers.User
             if (userId == null)
                 return Unauthorized(new { Message = "Invalid or expired token" });
 
+            // Fetch product details from ProductService
+            var productIds = orderDto.OrderDetails.Select(od => od.ProductId).ToList();
+            var productResponse = await _productRequestClient.GetResponse<ProductInfoResponseEvent>(
+                new GetProductsRequest(productIds));
+
+            var productDictionary = productResponse.Message.Products
+                .ToDictionary(p => p.ProductId, p => new { p.ProductName, p.UnitPrice });
+
+            // Check stock availability
             var stockCheckEvent = new StockCheckEvent
             {
                 OrderItems = orderDto.OrderDetails.Select(od => new OrderItem
@@ -116,21 +125,32 @@ namespace OrderService.Controllers.User
                 return BadRequest(new { Message = response.Message.FailureReason });
             }
 
+            // Create order
             var order = new Order
             {
                 UserId = userId.Value,
                 OrderDate = DateTime.UtcNow,
-                OrderDetails = orderDto.OrderDetails.Select(od => new OrderDetail
+                OrderDetails = orderDto.OrderDetails.Select(od =>
                 {
-                    ProductId = od.ProductId,
-                    Quantity = od.Quantity,
-                    ProductPrice = od.ProductPrice
+                    var product = productDictionary.GetValueOrDefault(od.ProductId);
+                    if (product == null)
+                    {
+                        throw new Exception($"Product with ID {od.ProductId} not found.");
+                    }
+
+                    return new OrderDetail
+                    {
+                        ProductId = od.ProductId,
+                        Quantity = od.Quantity,
+                        ProductPrice = product.UnitPrice
+                    };
                 }).ToList()
             };
 
             _dbContext.Orders.Add(order);
             await _dbContext.SaveChangesAsync();
 
+            // Publish OrderCreatedEvent
             var orderEvent = new OrderCreatedEvent
             {
                 OrderId = order.Id,

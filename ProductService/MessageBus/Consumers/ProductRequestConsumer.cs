@@ -23,7 +23,8 @@ public class ProductRequestConsumer : IConsumer<GetProductsRequest>
             Products = products.Select(p => new ProductInfo
             {
                 ProductId = p.Id,
-                ProductName = p.Name
+                ProductName = p.Name,
+                UnitPrice = p.Price
             }).ToList()
         };
 

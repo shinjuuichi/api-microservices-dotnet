@@ -1,28 +1,27 @@
 {
   "Routes": [
-
-    //Auth Web API
+    // Auth Web API
     {
       "DownstreamPathTemplate": "/api/v1/auth/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5001
+          "Host": "api-microservices-dotnet-auth-service-1",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/api/v1/auth/{everything}",
       "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
     },
 
-    //Product Web API
+    // Product Web API
     {
       "DownstreamPathTemplate": "/api/v1/product/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5002
+          "Host": "api-microservices-dotnet-product-service-1",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/api/v1/product/{everything}",
@@ -36,14 +35,14 @@
       }
     },
 
-    //Category Web API
+    // Category Web API
     {
       "DownstreamPathTemplate": "/api/v1/category/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5002
+          "Host": "api-microservices-dotnet-product-service-1",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/api/v1/category/{everything}",
@@ -57,14 +56,14 @@
       }
     },
 
-    //Order management
+    // Order Management
     {
       "DownstreamPathTemplate": "/api/v1/admin/orders/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5003
+          "Host": "api-microservices-dotnet-order-service-1",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/api/v1/admin/orders/{everything}",
@@ -78,14 +77,14 @@
       }
     },
 
-    //Order for user
+    // Order for User
     {
       "DownstreamPathTemplate": "/api/v1/user/orders/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5003
+          "Host": "api-microservices-dotnet-order-service-1",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/api/v1/user/orders/{everything}",
@@ -98,7 +97,6 @@
         "Role": "User"
       }
     }
-
   ],
   "GlobalConfiguration": {
     "BaseUrl": "http://localhost:5000"
