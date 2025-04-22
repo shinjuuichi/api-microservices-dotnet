@@ -46,7 +46,7 @@ services:
     environment:
       RABBITMQ_HOST: rabbitmq
       RABBITMQ_PORT: 5672
-      CONNECTION_STRING: "Server=mssql,1433;Database=UserDb;User Id=sa;Password=Shinjuuichidesu@11;TrustServerCertificate=True"
+      ConnectionStrings__DefaultConnection: "Server=mssql,1433;Database=UserDb;User Id=sa;Password=Shinjuuichidesu@11;TrustServerCertificate=True"
     networks:
       - microservices-network
     depends_on:
@@ -59,7 +59,7 @@ services:
     environment:
       RABBITMQ_HOST: rabbitmq
       RABBITMQ_PORT: 5672
-      CONNECTION_STRING: "Server=mssql,1433;Database=ProductDb;User Id=sa;Password=Shinjuuichidesu@11;TrustServerCertificate=True"
+      ConnectionStrings__DefaultConnection: "Server=mssql,1433;Database=ProductDb;User Id=sa;Password=Shinjuuichidesu@11;TrustServerCertificate=True"
     networks:
       - microservices-network
     depends_on:
@@ -72,7 +72,7 @@ services:
     environment:
       RABBITMQ_HOST: rabbitmq
       RABBITMQ_PORT: 5672
-      CONNECTION_STRING: "Server=mssql,1433;Database=OrderDb;User Id=sa;Password=Shinjuuichidesu@11;TrustServerCertificate=True"
+      ConnectionStrings__DefaultConnection: "Server=mssql,1433;Database=OrderDb;User Id=sa;Password=Shinjuuichidesu@11;TrustServerCertificate=True"
     networks:
       - microservices-network
     depends_on:
