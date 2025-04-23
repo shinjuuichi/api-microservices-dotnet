@@ -1,5 +1,3 @@
-// Ocelot configuration file for minikube deployment
-
 {
   "Routes": [
     {
@@ -7,19 +5,21 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "auth-service.default.svc.cluster.local",
+          // it's a docker container name
+          "Host": "auth-service",
           "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/api/v1/auth/{everything}",
       "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
     },
+
     {
       "DownstreamPathTemplate": "/api/v1/product/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "product-service.default.svc.cluster.local",
+          "Host": "product-service",
           "Port": 8080
         }
       ],
@@ -33,12 +33,13 @@
         "Role": "Admin"
       }
     },
+
     {
       "DownstreamPathTemplate": "/api/v1/category/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "product-service.default.svc.cluster.local",
+          "Host": "product-service",
           "Port": 8080
         }
       ],
@@ -52,12 +53,13 @@
         "Role": "Admin"
       }
     },
+
     {
       "DownstreamPathTemplate": "/api/v1/admin/orders/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "order-service.default.svc.cluster.local",
+          "Host": "order-service",
           "Port": 8080
         }
       ],
@@ -71,12 +73,13 @@
         "Role": "Admin"
       }
     },
+
     {
       "DownstreamPathTemplate": "/api/v1/user/orders/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "order-service.default.svc.cluster.local",
+          "Host": "order-service",
           "Port": 8080
         }
       ],
@@ -92,115 +95,9 @@
     }
   ],
   "GlobalConfiguration": {
-    "BaseUrl": "http://192.168.49.2:30000" // Update with Minikube IP and NodePort after deployment
+    "BaseUrl": "http://localhost:5000"
   }
 }
-
-/**
-  *
-  * Ocelot configuration file for docker compose development
-  */
-
-//{
-//  "Routes": [
-//    {
-//      "DownstreamPathTemplate": "/api/v1/auth/{everything}",
-//      "DownstreamScheme": "http",
-//      "DownstreamHostAndPorts": [
-//        {
-//          // it's a docker container name
-//          "Host": "auth-service",
-//          "Port": 8080
-//        }
-//      ],
-//      "UpstreamPathTemplate": "/api/v1/auth/{everything}",
-//      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
-//    },
-
-//    {
-//      "DownstreamPathTemplate": "/api/v1/product/{everything}",
-//      "DownstreamScheme": "http",
-//      "DownstreamHostAndPorts": [
-//        {
-//          "Host": "product-service",
-//          "Port": 8080
-//        }
-//      ],
-//      "UpstreamPathTemplate": "/api/v1/product/{everything}",
-//      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
-//      "AuthenticationOptions": {
-//        "AuthenticationProviderKey": "Bearer",
-//        "AllowedScopes": []
-//      },
-//      "RouteClaimsRequirement": {
-//        "Role": "Admin"
-//      }
-//    },
-
-//    {
-//      "DownstreamPathTemplate": "/api/v1/category/{everything}",
-//      "DownstreamScheme": "http",
-//      "DownstreamHostAndPorts": [
-//        {
-//          "Host": "product-service",
-//          "Port": 8080
-//        }
-//      ],
-//      "UpstreamPathTemplate": "/api/v1/category/{everything}",
-//      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
-//      "AuthenticationOptions": {
-//        "AuthenticationProviderKey": "Bearer",
-//        "AllowedScopes": []
-//      },
-//      "RouteClaimsRequirement": {
-//        "Role": "Admin"
-//      }
-//    },
-
-//    {
-//      "DownstreamPathTemplate": "/api/v1/admin/orders/{everything}",
-//      "DownstreamScheme": "http",
-//      "DownstreamHostAndPorts": [
-//        {
-//          "Host": "order-service",
-//          "Port": 8080
-//        }
-//      ],
-//      "UpstreamPathTemplate": "/api/v1/admin/orders/{everything}",
-//      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
-//      "AuthenticationOptions": {
-//        "AuthenticationProviderKey": "Bearer",
-//        "AllowedScopes": []
-//      },
-//      "RouteClaimsRequirement": {
-//        "Role": "Admin"
-//      }
-//    },
-
-//    {
-//      "DownstreamPathTemplate": "/api/v1/user/orders/{everything}",
-//      "DownstreamScheme": "http",
-//      "DownstreamHostAndPorts": [
-//        {
-//          "Host": "order-service",
-//          "Port": 8080
-//        }
-//      ],
-//      "UpstreamPathTemplate": "/api/v1/user/orders/{everything}",
-//      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
-//      "AuthenticationOptions": {
-//        "AuthenticationProviderKey": "Bearer",
-//        "AllowedScopes": []
-//      },
-//      "RouteClaimsRequirement": {
-//        "Role": "User"
-//      }
-//    }
-//  ],
-//  "GlobalConfiguration": {
-//    "BaseUrl": "http://localhost:5000"
-//  }
-//}
 
 
 
