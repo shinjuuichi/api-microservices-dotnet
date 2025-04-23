@@ -1,217 +1,56 @@
-# ✨ .NET 8 Microservices Architecture
-
-A comprehensive **microservices-based e-commerce solution** built with **.NET 8**, featuring the **API Gateway** pattern, **message-based communication**, and **service isolation** for scalability and maintainability.
-
 ---
 
-## 🌐 Project Structure
+## 🐳 Running with Docker
 
-This solution consists of multiple microservices, each with a specific responsibility:
+This project provides full Docker support for local development and deployment. All core services, dependencies, and databases can be started with a single command using **Docker Compose**.
 
-- **🛡️ ApiGateway** - Routes client requests to appropriate services using **Ocelot**.
-- **🔒 AuthService** - Handles **authentication & authorization**.
-- **💼 ProductService** - Manages **products & inventory**.
-- **🏢 OrderService** - Processes **customer orders**.
-- **📝 SharedLibrary** - Common **components & utilities** shared across services.
-- **⚖️ JwtAuthenticationManager** - Centralized **authentication logic**.
-- **🌏 RabbitMQ.Contracts** - Defines **message contracts** for service communication.
+### 🛠️ Requirements
+- **Docker** (latest recommended)
+- **Docker Compose** (v2+)
+- No additional local installations of .NET or SQL Server required
 
----
+### ⚙️ Service Ports
+| Service                | Container Name         | Exposed Port |
+|------------------------|-----------------------|--------------|
+| **API Gateway**        | csharp-apigateway     | 8080         |
+| **AuthService**        | csharp-authservice    | 8081         |
+| **ProductService**     | csharp-productservice | 8082         |
+| **OrderService**       | csharp-orderservice   | 8083         |
+| **RabbitMQ**           | rabbitmq              | 5672, 15672  |
+| **SQL Server**         | sqlserver             | 1433         |
 
-## 💻 Technologies Used
+> **Note:** All .NET services listen on port 8080 inside their containers, but are mapped to different host ports for convenience.
 
-| Technology               | Purpose                                    |
-|--------------------------|--------------------------------------------|
-| **.NET 8**               | Core framework for microservices          |
-| **Entity Framework Core**| ORM for database interactions             |
-| **SQL Server**           | Relational database for storage           |
-| **Ocelot**               | API Gateway for request routing           |
-| **MassTransit & RabbitMQ** | Message broker for async communication   |
-| **JWT Authentication**   | Secure authentication mechanism           |
+### 🔑 Environment Variables
+- **SQL Server**: The default `SA_PASSWORD` is set to `Your_strong_password123!` in `docker-compose.yml`. **Change this for production use.**
+- Each service can be configured further via environment variables or `.env` files (see commented `env_file` lines in the compose file).
 
----
+### 🚀 Quick Start
 
-## ✅ Getting Started
+1️⃣ **Build and Start All Services**
 
-### 🛠️ Prerequisites
-
-Ensure you have the following installed:
-- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
-- [SQL Server](https://www.microsoft.com/sql-server/)
-- [Docker](https://www.docker.com/) (for RabbitMQ)
-
-### ♻️ Setup Instructions
-
-#### 1️⃣ Clone the Repository
 ```sh
-git clone https://github.com/shinjuuichi/api-microservices-dotnet
+docker compose up --build
 ```
 
-#### 2️⃣ Set Up Databases
-Create the following databases in **SQL Server**:
-- `UserDb`
-- `ProductDb`
-- `OrderDb`
+This will build all microservices and supporting containers, then start them together on a shared Docker network.
 
-#### 3️⃣ Apply Migrations
-```sh
-# Authentication
-cd JwtAuthenticationManager
-dotnet ef database update
+2️⃣ **Access Services**
+- **API Gateway:** http://localhost:8080
+- **AuthService:** http://localhost:8081
+- **ProductService:** http://localhost:8082
+- **OrderService:** http://localhost:8083
+- **RabbitMQ UI:** http://localhost:15672 (default user/pass: guest/guest)
+- **SQL Server:** localhost:1433 (user: sa, password: as above)
 
-# Product Service
-cd ProductService
-dotnet ef database update
+3️⃣ **Database Initialization**
+- Databases are created automatically by the services on startup if they do not exist.
+- If you need to apply migrations manually, you can still use the `dotnet ef database update` commands inside the respective containers.
 
-# Order Service
-cd OrderService
-dotnet ef database update
-```
-
-#### 4️⃣ Start RabbitMQ
-```sh
-docker run -d --hostname my-rabbit --name some-rabbit -p 5672:5672 -p 15672:15672 rabbitmq:3-management
-```
-
-#### 5️⃣ Run the Services
-Each service should be started in a separate terminal:
-```sh
-# API Gateway
-cd ApiGateway
-dotnet run
-
-# Auth Service
-cd AuthService
-dotnet run
-
-# Product Service
-cd ProductService
-dotnet run
-
-# Order Service
-cd OrderService
-dotnet run
-```
+### ⚡ Special Notes
+- All .NET services are built with **.NET 8** (see `ARG DOTNET_VERSION=8.0` in Dockerfiles).
+- Each service runs as a non-root user for improved security.
+- The `backend` Docker network and named volumes for RabbitMQ and SQL Server are managed automatically by Docker Compose.
+- For custom configuration, you can provide `.env` files in each service directory and uncomment the corresponding `env_file` lines in `docker-compose.yml`.
 
 ---
-
-## 📖 API Documentation
-
-### 🔒 Auth Service
-- **POST** `/api/v1/auth/register` - Register a new user
-- **POST** `/api/v1/auth/login` - Login and obtain JWT token
-- **GET** `/api/v1/auth/me` - Get current user info
-
-### 💼 Product Service
-- **GET** `/api/v1/product` - Retrieve all products
-- **GET** `/api/v1/product/{id}` - Retrieve product by ID
-- **POST** `/api/v1/product` - Create a new product
-- **PUT** `/api/v1/product/{id}` - Update a product
-- **DELETE** `/api/v1/product/{id}` - Delete a product
-
-### 🏢 Order Service
-#### 💼 Admin Endpoints
-- **GET** `/api/v1/admin/orders` - Retrieve all orders
-- **GET** `/api/v1/admin/orders/{id}` - Retrieve order by ID
-- **POST** `/api/v1/admin/orders` - Create a new order
-- **PUT** `/api/v1/admin/orders/{id}` - Update an order
-- **DELETE** `/api/v1/admin/orders/{id}` - Delete an order
-
-#### 👨‍👩‍👦 User Endpoints
-- **GET** `/api/v1/user/orders` - Retrieve user orders
-- **POST** `/api/v1/user/orders` - Place a new order
-
-## 🛠️ Key Features
-
-### 🌐 API Gateway (Ocelot)
-Efficient request routing using **Ocelot**:
-```csharp
-builder.Configuration.AddJsonFile("ocelot.json", optional: false, reloadOnChange: true);
-builder.Services.AddOcelot(builder.Configuration);
-```
-
-### ⚡ Centralized Exception Handling
-Unified **exception handling** across all services:
-```csharp
-app.UseMiddleware<ExceptionHandlingMiddleware>();
-```
-
-### 📡 Service Communication via RabbitMQ
-Microservices communicate asynchronously via **MassTransit & RabbitMQ**:
-```csharp
-public class OrderCreatedConsumer : IConsumer<OrderCreatedEvent>
-{
-    public async Task Consume(ConsumeContext<OrderCreatedEvent> context)
-    {
-        // Process order and update product inventory
-    }
-}
-```
-
-### 🔐 Secure Authentication (JWT)
-All services use **JWT Authentication** for security:
-```csharp
-builder.Services.AddCustomJwtAuthentication();
-```
-
----
-
-## 🌍 Architecture Overview
-
-```
-┌─────────────┐
-│   Client    │
-└──────┬──────┘
-       │
-┌──────▼──────┐
-│ API Gateway │
-└──────┬──────┘
-       │
-┌──────┼──────┬─────────┬─────────┐
-│      │      │         │         │
-▼      ▼      ▼         ▼         ▼
-┌──────────┐ ┌─────────┐ ┌─────────┐
-│   Auth   │ │ Product │ │  Order  │
-│ Service  │ │ Service │ │ Service │
-└──────────┘ └─────────┘ └─────────┘
-       ▲           ▲           ▲
-       │           │           │
-       └───────────┼───────────┘
-                   │
-             ┌─────▼─────┐
-             │ RabbitMQ  │
-             └───────────┘
-```
-
----
-
-## 🛡️ Middleware Components
-
-### ⛔ RestrictAccessMiddleware
-Controls **service access** based on HTTP **referrer headers**:
-```csharp
-public class RestrictAccessMiddleware
-{
-    public async Task InvokeAsync(HttpContext context)
-    {
-        var referrer = context.Request.Headers["Referer"].FirstOrDefault();
-        if (string.IsNullOrEmpty(referrer))
-        {
-            context.Response.StatusCode = 403;
-            await context.Response.WriteAsync("Access Denied.");
-            return;
-        }
-        await next(context);
-    }
-}
-```
-
----
-
-## ⚖️ License
-
-This project is licensed under the [MIT License](LICENSE).
-
----
-
-👍 **Happy Coding!**

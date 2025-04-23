@@ -1,30 +1,103 @@
-**/.classpath
-**/.dockerignore
-**/.env
-**/.git
-**/.gitignore
-**/.project
-**/.settings
-**/.toolstarget
-**/.vs
-**/.vscode
-**/*.*proj.user
-**/*.dbmdl
-**/*.jfm
-**/azds.yaml
-**/bin
-**/charts
-**/docker-compose*
-**/Dockerfile*
-**/node_modules
-**/npm-debug.log
-**/obj
-**/secrets.dev.yaml
-**/values.dev.yaml
-LICENSE
-README.md
-!**/.gitignore
-!.git/HEAD
-!.git/config
-!.git/packed-refs
-!.git/refs/heads/**
+# Version control
+.git/
+.gitignore
+.gitattributes
+
+# IDE and editor folders/files
+.vs/
+.idea/
+.vscode/
+*.suo
+*.user
+*.vsidx
+*.swp
+*.swo
+
+# Build outputs and intermediate files
+bin/
+obj/
+dist/
+build/
+out/
+
+# .NET specific
+*.dll
+*.exe
+*.pdb
+*.cache
+*.mdb
+*.db
+*.db-shm
+*.db-wal
+*.dtbcache.v2
+*.futdcache.v2
+*.original
+*.slnLaunch.user
+*.csproj.user
+*.pubxml.user
+
+# Test and debug artifacts
+test/
+tests/
+debug/
+*.log
+*.testlog
+*.manifest
+
+# Node.js (if any)
+node_modules/
+npm-debug.log
+yarn-debug.log
+
+# Python (if any)
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.coverage
+
+# Go (if any)
+/vendor/
+*.test
+.go-cache/
+
+# Java (if any)
+target/
+*.class
+.gradle/
+
+# Environment and secrets
+.env*
+*.env
+*.pem
+*.key
+*.crt
+config.local.*
+*.local.yml
+
+# Documentation and markdown
+README*
+*.md
+docs/
+
+# Docker and Compose files
+Dockerfile*
+docker-compose*
+
+# Temporary and local files
+tmp/
+temp/
+*.tmp
+.local/
+local/
+
+# Miscellaneous
+*.bak
+*.backup
+*.orig
+*.old
+
+# Exclude deployment YAMLs and necessary config files (do not ignore)
+!*.yaml
+!appsettings*.json
+!ocelot.json
