@@ -1,8 +1,8 @@
 ﻿using MassTransit;
 using OrderService.DependencyInjection.Extensions.DependencyInjection.Options;
-using RabbitMQ.Contracts.DTOs.Product;
-using RabbitMQ.Contracts.DTOs.User;
-using RabbitMQ.Contracts.Events;
+using RabbitMQ.Contracts.Events.Order;
+using RabbitMQ.Contracts.Events.Product;
+using RabbitMQ.Contracts.Events.User;
 using System.Reflection;
 
 
@@ -30,8 +30,8 @@ namespace OrderService.DependencyInjection.Extensions.DependencyInjection.Extens
                     bus.ConfigureEndpoints(context);
                 });
                 mt.AddRequestClient<StockCheckEvent>();
-                mt.AddRequestClient<GetUserRequest>();
-                mt.AddRequestClient<GetProductsRequest>();
+                mt.AddRequestClient<GetUserRequestEvent>();
+                mt.AddRequestClient<GetProductsRequestEvent>();
             });
 
             return services;

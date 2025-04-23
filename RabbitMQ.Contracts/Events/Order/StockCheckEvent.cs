@@ -1,4 +1,4 @@
-﻿namespace RabbitMQ.Contracts.Events
+﻿namespace RabbitMQ.Contracts.Events.Order
 {
     public class StockCheckEvent
     {

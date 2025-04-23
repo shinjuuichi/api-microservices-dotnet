@@ -74,7 +74,6 @@
       }
     },
 
-    // Order for User
     {
       "DownstreamPathTemplate": "/api/v1/user/orders/{everything}",
       "DownstreamScheme": "http",
@@ -99,3 +98,111 @@
     "BaseUrl": "http://localhost:5000"
   }
 }
+
+
+
+/**
+  *
+  * Ocelot configuration file for local development
+  */
+
+//{
+//  "Routes": [
+//    {
+//      "DownstreamPathTemplate": "/api/v1/auth/{everything}",
+//      "DownstreamScheme": "http",
+//      "DownstreamHostAndPorts": [
+//        {
+//          // it's a docker container name
+//          "Host": "localhost",
+//          "Port": 5001
+//        }
+//      ],
+//      "UpstreamPathTemplate": "/api/v1/auth/{everything}",
+//      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
+//    },
+
+//    {
+//      "DownstreamPathTemplate": "/api/v1/product/{everything}",
+//      "DownstreamScheme": "http",
+//      "DownstreamHostAndPorts": [
+//        {
+//          "Host": "localhost",
+//          "Port": 5002
+//        }
+//      ],
+//      "UpstreamPathTemplate": "/api/v1/product/{everything}",
+//      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+//      "AuthenticationOptions": {
+//        "AuthenticationProviderKey": "Bearer",
+//        "AllowedScopes": []
+//      },
+//      "RouteClaimsRequirement": {
+//        "Role": "Admin"
+//      }
+//    },
+
+//    {
+//      "DownstreamPathTemplate": "/api/v1/category/{everything}",
+//      "DownstreamScheme": "http",
+//      "DownstreamHostAndPorts": [
+//        {
+//          "Host": "localhost",
+//          "Port": 5002
+//        }
+//      ],
+//      "UpstreamPathTemplate": "/api/v1/category/{everything}",
+//      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+//      "AuthenticationOptions": {
+//        "AuthenticationProviderKey": "Bearer",
+//        "AllowedScopes": []
+//      },
+//      "RouteClaimsRequirement": {
+//        "Role": "Admin"
+//      }
+//    },
+
+//    {
+//      "DownstreamPathTemplate": "/api/v1/admin/orders/{everything}",
+//      "DownstreamScheme": "http",
+//      "DownstreamHostAndPorts": [
+//        {
+//          "Host": "localhost",
+//          "Port": 5003
+//        }
+//      ],
+//      "UpstreamPathTemplate": "/api/v1/admin/orders/{everything}",
+//      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+//      "AuthenticationOptions": {
+//        "AuthenticationProviderKey": "Bearer",
+//        "AllowedScopes": []
+//      },
+//      "RouteClaimsRequirement": {
+//        "Role": "Admin"
+//      }
+//    },
+
+//    {
+//      "DownstreamPathTemplate": "/api/v1/user/orders/{everything}",
+//      "DownstreamScheme": "http",
+//      "DownstreamHostAndPorts": [
+//        {
+//          "Host": "localhost",
+//          "Port": 5003
+//        }
+//      ],
+//      "UpstreamPathTemplate": "/api/v1/user/orders/{everything}",
+//      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+//      "AuthenticationOptions": {
+//        "AuthenticationProviderKey": "Bearer",
+//        "AllowedScopes": []
+//      },
+//      "RouteClaimsRequirement": {
+//        "Role": "User"
+//      }
+//    }
+//  ],
+//  "GlobalConfiguration": {
+//    "BaseUrl": "https://localhost:5000"
+//  }
+//}

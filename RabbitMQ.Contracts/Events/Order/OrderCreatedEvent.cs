@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RabbitMQ.Contracts.Events
+namespace RabbitMQ.Contracts.Events.Order
 {
     public class OrderCreatedEvent
     {

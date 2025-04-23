@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RabbitMQ.Contracts.DTOs.User
+namespace RabbitMQ.Contracts.Events.User
 {
-    public class GetUserRequest
+    public class GetUserRequestEvent
     {
         public int UserId { get; set; }
     }

@@ -1,7 +1,7 @@
 ﻿using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using ProductService.Data;
-using RabbitMQ.Contracts.Events;
+using RabbitMQ.Contracts.Events.Order;
 
 public class StockCheckConsumer : IConsumer<StockCheckEvent>
 {

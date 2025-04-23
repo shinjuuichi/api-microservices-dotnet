@@ -1,8 +1,8 @@
 ﻿using JwtAuthenticationManager.Data;
 using MassTransit;
-using RabbitMQ.Contracts.DTOs.User;
+using RabbitMQ.Contracts.Events.User;
 
-public class UserRequestConsumer : IConsumer<GetUserRequest>
+public class UserRequestConsumer : IConsumer<GetUserRequestEvent>
 {
     private readonly UserDbContext _dbContext;
 
@@ -11,7 +11,7 @@ public class UserRequestConsumer : IConsumer<GetUserRequest>
         _dbContext = dbContext;
     }
 
-    public async Task Consume(ConsumeContext<GetUserRequest> context)
+    public async Task Consume(ConsumeContext<GetUserRequestEvent> context)
     {
         var user = await _dbContext.Users.FindAsync(context.Message.UserId);
         var response = new UserInfoResponseEvent
