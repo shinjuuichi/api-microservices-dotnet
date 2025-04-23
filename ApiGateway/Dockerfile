@@ -1,45 +1,32 @@
-# syntax=docker/dockerfile:1
+# See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-ARG DOTNET_VERSION=8.0
-
-# --- Build Stage ---
-FROM mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION} AS builder
-WORKDIR /src
-
-# Copy csproj and restore as distinct layers
-COPY --link ApiGateway.csproj ./
-COPY --link ../JwtAuthenticationManager/JwtAuthenticationManager.csproj ../JwtAuthenticationManager/
-COPY --link ../SharedLibrary/SharedLibrary.csproj ../SharedLibrary/
-COPY --link ../api-microservices-dotnet.ServiceDefaults/api-microservices-dotnet.ServiceDefaults.csproj ../api-microservices-dotnet.ServiceDefaults/
-
-# Restore dependencies with cache mounts
-RUN --mount=type=cache,target=/root/.nuget/packages \
-    --mount=type=cache,target=/root/.cache/msbuild \
-    dotnet restore ApiGateway.csproj
-
-# Copy the rest of the source code
-COPY --link . .
-COPY --link ../JwtAuthenticationManager ../JwtAuthenticationManager
-COPY --link ../SharedLibrary ../SharedLibrary
-COPY --link ../api-microservices-dotnet.ServiceDefaults ../api-microservices-dotnet.ServiceDefaults
-
-# Publish the application
-RUN --mount=type=cache,target=/root/.nuget/packages \
-    --mount=type=cache,target=/root/.cache/msbuild \
-    dotnet publish ApiGateway.csproj -c Release -o /app/publish --no-restore
-
-# --- Runtime Stage ---
-FROM mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION} AS final
+# This stage is used when running from VS in fast mode (Default for Debug configuration)
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+USER $APP_UID
 WORKDIR /app
-
-# Create a non-root user
-RUN addgroup --system appgroup && adduser --system --ingroup appgroup appuser
-USER appuser
-
-# Copy published output
-COPY --from=builder /app/publish .
-
-# Expose the default port for ASP.NET (Ocelot typically uses 80 or 8080)
 EXPOSE 8080
+EXPOSE 8081
 
+
+# This stage is used to build the service project
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+ARG BUILD_CONFIGURATION=Release
+WORKDIR /src
+COPY ["ApiGateway/ApiGateway.csproj", "ApiGateway/"]
+COPY ["JwtAuthenticationManager/JwtAuthenticationManager.csproj", "JwtAuthenticationManager/"]
+COPY ["SharedLibrary/SharedLibrary.csproj", "SharedLibrary/"]
+RUN dotnet restore "./ApiGateway/ApiGateway.csproj"
+COPY . .
+WORKDIR "/src/ApiGateway"
+RUN dotnet build "./ApiGateway.csproj" -c $BUILD_CONFIGURATION -o /app/build
+
+# This stage is used to publish the service project to be copied to the final stage
+FROM build AS publish
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "./ApiGateway.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+
+# This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "ApiGateway.dll"]
