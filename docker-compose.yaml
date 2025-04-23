@@ -1,3 +1,101 @@
+# services:
+#   rabbitmq:
+#     container_name: rabbitmq
+#     image: rabbitmq:3-management
+#     ports:
+#       - "5672:5672"
+#       - "15672:15672"
+#     environment:
+#       RABBITMQ_DEFAULT_USER: "guest"
+#       RABBITMQ_DEFAULT_PASS: "guest"
+#     volumes:
+#       - rabbitmq_data:/var/lib/rabbitmq
+#     networks:
+#       - microservices-network
+
+#   mssql:
+#     container_name: mssql
+#     image: mcr.microsoft.com/mssql/server:2022-latest
+#     ports:
+#       - "1433:1433"
+#     environment:
+#       SA_PASSWORD: "Shinjuuichidesu@11"
+#       ACCEPT_EULA: "Y"
+#     volumes:
+#       - mssql_data:/var/opt/mssql
+#     networks:
+#       - microservices-network
+
+#   api-gateway:
+#     container_name: api-gateway
+#     image: shinjuuichi/api-gateway:latest
+#     ports:
+#       - "5000:8080"
+#     depends_on:
+#       - auth-service
+#       - product-service
+#       - order-service
+#     networks:
+#       - microservices-network
+
+#   auth-service:
+#     container_name: auth-service
+#     image: shinjuuichi/auth-service:latest
+#     ports:
+#       - "5001:8080"
+#     environment:
+#       MassTransitConfiguration__Host: rabbitmq
+#       MassTransitConfiguration__Username: guest
+#       MassTransitConfiguration__Password: guest
+#       ConnectionStrings__UserDb: "Server=mssql,1433;Database=UserDb;User Id=sa;Password=Shinjuuichidesu@11;TrustServerCertificate=True"
+#     networks:
+#       - microservices-network
+#     depends_on:
+#       - mssql
+#       - rabbitmq
+
+#   product-service:
+#     container_name: product-service
+#     image: shinjuuichi/product-service:latest
+#     ports:
+#       - "5002:8080"
+#     environment:
+#       MassTransitConfiguration__Host: rabbitmq
+#       MassTransitConfiguration__Username: guest
+#       MassTransitConfiguration__Password: guest
+#       ConnectionStrings__ProductDb: "Server=mssql,1433;Database=ProductDb;User Id=sa;Password=Shinjuuichidesu@11;TrustServerCertificate=True"
+#     networks:
+#       - microservices-network
+#     depends_on:
+#       - mssql
+#       - rabbitmq
+
+#   order-service:
+#     container_name: order-service
+#     image: shinjuuichi/order-service:latest
+#     ports:
+#       - "5003:8080"
+#     environment:
+#       MassTransitConfiguration__Host: rabbitmq
+#       MassTransitConfiguration__Username: guest
+#       MassTransitConfiguration__Password: guest
+#       ConnectionStrings__OrderDb: "Server=mssql,1433;Database=OrderDb;User Id=sa;Password=Shinjuuichidesu@11;TrustServerCertificate=True"
+#     networks:
+#       - microservices-network
+#     depends_on:
+#       - mssql
+#       - rabbitmq
+
+# networks:
+#   microservices-network:
+#     driver: bridge
+
+# volumes:
+#   rabbitmq_data:
+#   mssql_data:
+
+### deployment with minikube ###
+
 services:
   rabbitmq:
     container_name: rabbitmq
@@ -44,10 +142,10 @@ services:
     ports:
       - "5001:8080"
     environment:
-      MassTransitConfiguration__Host: rabbitmq
+      MassTransitConfiguration__Host: rabbitmq-service
       MassTransitConfiguration__Username: guest
       MassTransitConfiguration__Password: guest
-      ConnectionStrings__UserDb: "Server=mssql,1433;Database=UserDb;User Id=sa;Password=Shinjuuichidesu@11;TrustServerCertificate=True"
+      ConnectionStrings__UserDb: "Server=mssql-service;Database=UserDb;User Id=sa;Password=Shinjuuichidesu@11;TrustServerCertificate=True"
     networks:
       - microservices-network
     depends_on:
@@ -60,10 +158,10 @@ services:
     ports:
       - "5002:8080"
     environment:
-      MassTransitConfiguration__Host: rabbitmq
+      MassTransitConfiguration__Host: rabbitmq-service
       MassTransitConfiguration__Username: guest
       MassTransitConfiguration__Password: guest
-      ConnectionStrings__ProductDb: "Server=mssql,1433;Database=ProductDb;User Id=sa;Password=Shinjuuichidesu@11;TrustServerCertificate=True"
+      ConnectionStrings__ProductDb: "Server=mssql-service;Database=ProductDb;User Id=sa;Password=Shinjuuichidesu@11;TrustServerCertificate=True"
     networks:
       - microservices-network
     depends_on:
@@ -76,10 +174,10 @@ services:
     ports:
       - "5003:8080"
     environment:
-      MassTransitConfiguration__Host: rabbitmq
+      MassTransitConfiguration__Host: rabbitmq-service
       MassTransitConfiguration__Username: guest
       MassTransitConfiguration__Password: guest
-      ConnectionStrings__OrderDb: "Server=mssql,1433;Database=OrderDb;User Id=sa;Password=Shinjuuichidesu@11;TrustServerCertificate=True"
+      ConnectionStrings__OrderDb: "Server=mssql-service;Database=OrderDb;User Id=sa;Password=Shinjuuichidesu@11;TrustServerCertificate=True"
     networks:
       - microservices-network
     depends_on:
