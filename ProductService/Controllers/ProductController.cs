@@ -15,7 +15,19 @@ namespace api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var products = await _dbContext.Products.Include(p => p.Category).ToListAsync();
+            var products = await _dbContext.Products
+                .Include(p => p.Category)
+                .Select(p => new
+                {
+                    id = p.Id,
+                    name = p.Name,
+                    price = p.Price,
+                    quantity = p.Quantity,
+                    categoryId = p.Category.Id,
+                    categoryName = p.Category.Name
+                })
+                .ToListAsync();
+
             return Ok(products);
         }
 
