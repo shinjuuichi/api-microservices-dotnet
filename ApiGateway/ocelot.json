@@ -1,111 +1,3 @@
-{
-  "Routes": [
-    {
-      "DownstreamPathTemplate": "/api/v1/auth/{everything}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          // it's a docker container name
-          "Host": "auth-service",
-          "Port": 8080
-        }
-      ],
-      "UpstreamPathTemplate": "/api/v1/auth/{everything}",
-      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
-    },
-
-    {
-      "DownstreamPathTemplate": "/api/v1/product/{everything}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "product-service",
-          "Port": 8080
-        }
-      ],
-      "UpstreamPathTemplate": "/api/v1/product/{everything}",
-      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": []
-      },
-      "RouteClaimsRequirement": {
-        "Role": "Admin"
-      }
-    },
-
-    {
-      "DownstreamPathTemplate": "/api/v1/category/{everything}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "product-service",
-          "Port": 8080
-        }
-      ],
-      "UpstreamPathTemplate": "/api/v1/category/{everything}",
-      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": []
-      },
-      "RouteClaimsRequirement": {
-        "Role": "Admin"
-      }
-    },
-
-    {
-      "DownstreamPathTemplate": "/api/v1/admin/orders/{everything}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "order-service",
-          "Port": 8080
-        }
-      ],
-      "UpstreamPathTemplate": "/api/v1/admin/orders/{everything}",
-      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": []
-      },
-      "RouteClaimsRequirement": {
-        "Role": "Admin"
-      }
-    },
-
-    {
-      "DownstreamPathTemplate": "/api/v1/user/orders/{everything}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "order-service",
-          "Port": 8080
-        }
-      ],
-      "UpstreamPathTemplate": "/api/v1/user/orders/{everything}",
-      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": []
-      },
-      "RouteClaimsRequirement": {
-        "Role": "User"
-      }
-    }
-  ],
-  "GlobalConfiguration": {
-    "BaseUrl": "http://localhost:5000"
-  }
-}
-
-
-
-/**
-  *
-  * Ocelot configuration file for local development
-  */
-
 //{
 //  "Routes": [
 //    {
@@ -114,8 +6,8 @@
 //      "DownstreamHostAndPorts": [
 //        {
 //          // it's a docker container name
-//          "Host": "localhost",
-//          "Port": 5001
+//          "Host": "auth-service",
+//          "Port": 8080
 //        }
 //      ],
 //      "UpstreamPathTemplate": "/api/v1/auth/{everything}",
@@ -127,8 +19,8 @@
 //      "DownstreamScheme": "http",
 //      "DownstreamHostAndPorts": [
 //        {
-//          "Host": "localhost",
-//          "Port": 5002
+//          "Host": "product-service",
+//          "Port": 8080
 //        }
 //      ],
 //      "UpstreamPathTemplate": "/api/v1/product/{everything}",
@@ -147,8 +39,8 @@
 //      "DownstreamScheme": "http",
 //      "DownstreamHostAndPorts": [
 //        {
-//          "Host": "localhost",
-//          "Port": 5002
+//          "Host": "product-service",
+//          "Port": 8080
 //        }
 //      ],
 //      "UpstreamPathTemplate": "/api/v1/category/{everything}",
@@ -167,8 +59,8 @@
 //      "DownstreamScheme": "http",
 //      "DownstreamHostAndPorts": [
 //        {
-//          "Host": "localhost",
-//          "Port": 5003
+//          "Host": "order-service",
+//          "Port": 8080
 //        }
 //      ],
 //      "UpstreamPathTemplate": "/api/v1/admin/orders/{everything}",
@@ -187,8 +79,8 @@
 //      "DownstreamScheme": "http",
 //      "DownstreamHostAndPorts": [
 //        {
-//          "Host": "localhost",
-//          "Port": 5003
+//          "Host": "order-service",
+//          "Port": 8080
 //        }
 //      ],
 //      "UpstreamPathTemplate": "/api/v1/user/orders/{everything}",
@@ -203,6 +95,215 @@
 //    }
 //  ],
 //  "GlobalConfiguration": {
-//    "BaseUrl": "https://localhost:5000"
+//    "BaseUrl": "http://localhost:5000"
 //  }
 //}
+
+
+
+/**
+  *
+  * Ocelot configuration file for local development
+  */
+{
+  "Routes": [
+    {
+      "UpstreamPathTemplate": "/api/v1/auth/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+      "DownstreamPathTemplate": "/api/v1/auth/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5001
+        },
+        {
+          "Host": "localhost",
+          "Port": 8081
+        }
+
+      ],
+
+      "FileCacheOptions": {
+        "TtlSeconds": 60,
+        "Region": "auth",
+        "Header": "OC-Caching-Control",
+        "EnabledContentHashing": false
+      },
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 1,
+        "Limit": 2
+      },
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      }
+    },
+
+    {
+      "UpstreamPathTemplate": "/api/v1/product/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+      "DownstreamPathTemplate": "/api/v1/product/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5002
+        },
+        {
+          "Host": "localhost",
+          "Port": 8082
+        }
+      ],
+
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "Role": "Admin"
+      },
+      "FileCacheOptions": {
+        "TtlSeconds": 60,
+        "Region": "product",
+        "Header": "OC-Caching-Control",
+        "EnabledContentHashing": false
+      },
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 1,
+        "Limit": 2
+      },
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      }
+    },
+
+    {
+      "UpstreamPathTemplate": "/api/v1/category/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+      "DownstreamPathTemplate": "/api/v1/category/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5002
+        },
+        {
+          "Host": "localhost",
+          "Port": 8082
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "Role": "Admin"
+      },
+      "FileCacheOptions": {
+        "TtlSeconds": 60,
+        "Region": "category",
+        "Header": "OC-Caching-Control",
+        "EnabledContentHashing": false
+      },
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 1,
+        "Limit": 2
+      },
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      }
+    },
+
+    {
+      "UpstreamPathTemplate": "/api/v1/admin/orders/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+      "DownstreamPathTemplate": "/api/v1/admin/orders/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        },
+        {
+          "Host": "localhost",
+          "Port": 8083
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "Role": "Admin"
+      },
+      "FileCacheOptions": {
+        "TtlSeconds": 60,
+        "Region": "order",
+        "Header": "OC-Caching-Control",
+        "EnabledContentHashing": false
+      },
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 1,
+        "Limit": 2
+      },
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      }
+    },
+
+    {
+      "UpstreamPathTemplate": "/api/v1/user/orders/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+      "DownstreamPathTemplate": "/api/v1/user/orders/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        },
+        {
+          "Host": "localhost",
+          "Port": 8083
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "Role": "User"
+      },
+      "FileCacheOptions": {
+        "TtlSeconds": 60,
+        "Region": "order",
+        "Header": "OC-Caching-Control",
+        "EnabledContentHashing": false
+      },
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 1,
+        "Limit": 2
+      },
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      }
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "http://localhost:5000"
+  }
+}

@@ -3,6 +3,8 @@ using Gateway.Middlewares;
 using JwtAuthenticationManager;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
+using Ocelot.Cache.CacheManager;
+
 using SharedLibrary.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,9 +13,13 @@ builder.AddServiceDefaults();
 
 builder.Configuration.AddJsonFile("ocelot.json", optional: false, reloadOnChange: true);
 
-builder.Services.AddOcelot(builder.Configuration);
-builder.Services.AddCustomJwtAuthentication();
+builder.Services.AddOcelot().AddCacheManager(x =>
+{
+    x.WithDictionaryHandle();
+});
 
+
+builder.Services.AddCustomJwtAuthentication();
 builder.Services.AddScoped<ExceptionHandlingMiddleware>();
 
 var apiPolicy = "MicroservicesPolicy";
