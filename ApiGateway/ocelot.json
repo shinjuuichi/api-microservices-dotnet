@@ -1,106 +1,3 @@
-//{
-//  "Routes": [
-//    {
-//      "DownstreamPathTemplate": "/api/v1/auth/{everything}",
-//      "DownstreamScheme": "http",
-//      "DownstreamHostAndPorts": [
-//        {
-//          // it's a docker container name
-//          "Host": "auth-service",
-//          "Port": 8080
-//        }
-//      ],
-//      "UpstreamPathTemplate": "/api/v1/auth/{everything}",
-//      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
-//    },
-
-//    {
-//      "DownstreamPathTemplate": "/api/v1/product/{everything}",
-//      "DownstreamScheme": "http",
-//      "DownstreamHostAndPorts": [
-//        {
-//          "Host": "product-service",
-//          "Port": 8080
-//        }
-//      ],
-//      "UpstreamPathTemplate": "/api/v1/product/{everything}",
-//      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
-//      "AuthenticationOptions": {
-//        "AuthenticationProviderKey": "Bearer",
-//        "AllowedScopes": []
-//      },
-//      "RouteClaimsRequirement": {
-//        "Role": "Admin"
-//      }
-//    },
-
-//    {
-//      "DownstreamPathTemplate": "/api/v1/category/{everything}",
-//      "DownstreamScheme": "http",
-//      "DownstreamHostAndPorts": [
-//        {
-//          "Host": "product-service",
-//          "Port": 8080
-//        }
-//      ],
-//      "UpstreamPathTemplate": "/api/v1/category/{everything}",
-//      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
-//      "AuthenticationOptions": {
-//        "AuthenticationProviderKey": "Bearer",
-//        "AllowedScopes": []
-//      },
-//      "RouteClaimsRequirement": {
-//        "Role": "Admin"
-//      }
-//    },
-
-//    {
-//      "DownstreamPathTemplate": "/api/v1/admin/orders/{everything}",
-//      "DownstreamScheme": "http",
-//      "DownstreamHostAndPorts": [
-//        {
-//          "Host": "order-service",
-//          "Port": 8080
-//        }
-//      ],
-//      "UpstreamPathTemplate": "/api/v1/admin/orders/{everything}",
-//      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
-//      "AuthenticationOptions": {
-//        "AuthenticationProviderKey": "Bearer",
-//        "AllowedScopes": []
-//      },
-//      "RouteClaimsRequirement": {
-//        "Role": "Admin"
-//      }
-//    },
-
-//    {
-//      "DownstreamPathTemplate": "/api/v1/user/orders/{everything}",
-//      "DownstreamScheme": "http",
-//      "DownstreamHostAndPorts": [
-//        {
-//          "Host": "order-service",
-//          "Port": 8080
-//        }
-//      ],
-//      "UpstreamPathTemplate": "/api/v1/user/orders/{everything}",
-//      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
-//      "AuthenticationOptions": {
-//        "AuthenticationProviderKey": "Bearer",
-//        "AllowedScopes": []
-//      },
-//      "RouteClaimsRequirement": {
-//        "Role": "User"
-//      }
-//    }
-//  ],
-//  "GlobalConfiguration": {
-//    "BaseUrl": "http://localhost:5000"
-//  }
-//}
-
-
-
 /**
   *
   * Ocelot configuration file for local development
@@ -113,6 +10,10 @@
       "DownstreamPathTemplate": "/api/v1/auth/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
+        {
+          "Host": "auth-service",
+          "Port": 8080
+        },
         {
           "Host": "localhost",
           "Port": 5001
@@ -148,6 +49,10 @@
       "DownstreamPathTemplate": "/api/v1/product/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
+        {
+          "Host": "product-service",
+          "Port": 8080
+        },
         {
           "Host": "localhost",
           "Port": 5002
@@ -190,6 +95,10 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
+          "Host": "product-service",
+          "Port": 8080
+        },
+        {
           "Host": "localhost",
           "Port": 5002
         },
@@ -230,6 +139,10 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
+          "Host": "order-service",
+          "Port": 8080
+        },
+        {
           "Host": "localhost",
           "Port": 5003
         },
@@ -269,6 +182,10 @@
       "DownstreamPathTemplate": "/api/v1/user/orders/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
+        {
+          "Host": "order-service",
+          "Port": 8080
+        },
         {
           "Host": "localhost",
           "Port": 5003
