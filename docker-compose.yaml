@@ -88,7 +88,8 @@ services:
 
 networks:
   microservices-network:
-    driver: bridge
+    driver: overlay
+    external: true
 
 volumes:
   rabbitmq_data:
