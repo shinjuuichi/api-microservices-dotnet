@@ -10,16 +10,20 @@
       "DownstreamPathTemplate": "/api/v1/auth/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
+        //{
+        //  "Host": "auth-service",
+        //  "Port": 8080
+        //},
+        //{
+        //  "Host": "localhost",
+        //  "Port": 5001
+        //},
+        //{
+        //  "Host": "localhost",
+        //  "Port": 8081
+        //},
         {
-          "Host": "auth-service",
-          "Port": 8080
-        },
-        {
-          "Host": "localhost",
-          "Port": 5001
-        },
-        {
-          "Host": "localhost",
+          "Host": "192.168.100.5",
           "Port": 8081
         }
 
@@ -49,16 +53,20 @@
       "DownstreamPathTemplate": "/api/v1/product/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
+        //{
+        //  "Host": "product-service",
+        //  "Port": 8080
+        //},
+        //{
+        //  "Host": "localhost",
+        //  "Port": 5002
+        //},
+        //{
+        //  "Host": "localhost",
+        //  "Port": 8082
+        //},
         {
-          "Host": "product-service",
-          "Port": 8080
-        },
-        {
-          "Host": "localhost",
-          "Port": 5002
-        },
-        {
-          "Host": "localhost",
+          "Host": "192.168.100.5",
           "Port": 8082
         }
       ],
@@ -94,16 +102,20 @@
       "DownstreamPathTemplate": "/api/v1/category/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
+        //{
+        //  "Host": "product-service",
+        //  "Port": 8080
+        //},
+        //{
+        //  "Host": "localhost",
+        //  "Port": 5002
+        //},
+        //{
+        //  "Host": "localhost",
+        //  "Port": 8082
+        //},
         {
-          "Host": "product-service",
-          "Port": 8080
-        },
-        {
-          "Host": "localhost",
-          "Port": 5002
-        },
-        {
-          "Host": "localhost",
+          "Host": "192.168.100.5",
           "Port": 8082
         }
       ],
@@ -138,16 +150,20 @@
       "DownstreamPathTemplate": "/api/v1/admin/orders/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
+        //{
+        //  "Host": "order-service",
+        //  "Port": 8080
+        //},
+        //{
+        //  "Host": "localhost",
+        //  "Port": 5003
+        //},
+        //{
+        //  "Host": "localhost",
+        //  "Port": 8083
+        //},
         {
-          "Host": "order-service",
-          "Port": 8080
-        },
-        {
-          "Host": "localhost",
-          "Port": 5003
-        },
-        {
-          "Host": "localhost",
+          "Host": "192.168.100.5",
           "Port": 8083
         }
       ],
@@ -182,16 +198,20 @@
       "DownstreamPathTemplate": "/api/v1/user/orders/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
+        //{
+        //  "Host": "order-service",
+        //  "Port": 8080
+        //},
+        //{
+        //  "Host": "localhost",
+        //  "Port": 5003
+        //},
+        //{
+        //  "Host": "localhost",
+        //  "Port": 8083
+        //},
         {
-          "Host": "order-service",
-          "Port": 8080
-        },
-        {
-          "Host": "localhost",
-          "Port": 5003
-        },
-        {
-          "Host": "localhost",
+          "Host": "192.168.100.5",
           "Port": 8083
         }
       ],
@@ -221,6 +241,6 @@
     }
   ],
   "GlobalConfiguration": {
-    "BaseUrl": "http://localhost:8080"
+    "BaseUrl": "http://192.168.100.5:8080"
   }
 }
